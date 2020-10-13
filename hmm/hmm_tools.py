@@ -33,7 +33,7 @@ class HMM_AR():
         # X: array of shape [num_samples, windowed_time_signal]
         # M: number of AR coefficients
         # ar: array of shape [num_samples, M]
-        ar = self.get_ar(X, M)
+        ar = self.get_ar(X, self.M)
 
         num_samples = X.shape[0]
         predictions = np.zeros((num_samples, self.N))

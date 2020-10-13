@@ -33,7 +33,7 @@ class HMM_AR():
         # X: array of shape [num_samples, windowed_time_signal]
         # M: number of AR coefficients
         # ar: array of shape [num_samples, M]
-        ar = self.get_ar(X, self.M)
+        ar = self.get_ar(X)
 
         num_samples = X.shape[0]
         predictions = np.zeros((num_samples, self.N))
@@ -47,7 +47,7 @@ class HMM_AR():
         a = []
         for k in range(X.shape[0]):
             mod = AR(X[k,:])
-            fitmod = mod.fit(M-1)
+            fitmod = mod.fit(self.M-1)
             a.append(fitmod.params)
         return np.array(a)
 

@@ -1,6 +1,7 @@
 import scipy.special
 from statsmodels.tsa.ar_model import AR
 import numpy as np
+from hmmlearn.hmm import *
 
 def split_signal(signal, window_size, overlap):
   # window_size: length of window
@@ -14,27 +15,35 @@ def split_signal(signal, window_size, overlap):
 
   return (np.array(X))
 
+class HMM_AR():
+    def __init__(self, M, N):
+        self.N = N
+        self.M = M
 
-class hmm_ar():
-    def __init__(self, hmm_list):
-        self.hmm_list = hmm_list
-        self.N_hmm = len(hmm_list)
+    def fit(self, X_train, num_states, num_mix):
+        # X_train: list of time signals. Each component corresponds to a HMM
+        assert len(X_train)==self.N
+        self.models = []
+        for k in range(self.N):
+            hmm = GMMHMM(n_components=num_states, n_mix=num_mix, n_iter=100, verbose=False, init_params='smcw', tol=1e-3)
+            hmm.fit(X_train[k])
+            self.models.append(hmm)
 
-    def predict(self, X, M):
+    def predict(self, X):
         # X: array of shape [num_samples, windowed_time_signal]
         # M: number of AR coefficients
         # ar: array of shape [num_samples, M]
         ar = self.get_ar(X, M)
 
         num_samples = X.shape[0]
-        predictions = np.zeros((num_samples, self.N_hmm))
+        predictions = np.zeros((num_samples, self.N))
 
         for i in range(num_samples):
-            for j in range(self.N_hmm):
-                predictions[i,j] = self.hmm_list[j].score(X[i,:].reshape(-1,1))
+            for j in range(self.N):
+                predictions[i,j] = self.models[j].score(X[i,:].reshape(-1,1))
         return predictions
 
-    def get_ar(self, X, M):
+    def get_ar(self, X):
         a = []
         for k in range(X.shape[0]):
             mod = AR(X[k,:])

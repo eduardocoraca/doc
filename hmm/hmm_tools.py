@@ -41,6 +41,7 @@ class HMM_AR():
         for i in range(num_samples):
             for j in range(self.N):
                 predictions[i,j] = self.models[j].score(X[i,:].reshape(-1,1))
+            predictions[i,:] = scipy.special.softmax(predictions[i,:])
         return predictions
 
     def get_ar(self, X):

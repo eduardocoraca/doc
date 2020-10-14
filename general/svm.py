@@ -13,11 +13,4 @@ def train_svmr(x_train, x_test, y_train, y_test):
   # 2) Treinando o modelo
   grid.fit(X = x_train, y = y_train)    
 
-  # 3) Avaliando o modelo
-  MSE_train = sklearn.metrics.mean_squared_error(y_train, grid.predict(x_train))
-  MSE_test = sklearn.metrics.mean_squared_error(y_test, grid.predict(x_test))
-  from decimal import Decimal
-  print('MSE Treino:' + '%.2E' % Decimal(MSE_train))
-  print('MSE Teste:' + '%.2E' % Decimal(MSE_test))
-
-  return grid, MSE_train, MSE_test
+  return grid

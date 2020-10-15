@@ -1,4 +1,5 @@
 def split_signal(signal, window_size, overlap):
+  import numpy as np
   # window_size: length of window
   # overlap: % of overlap
   signal = signal.reshape(-1)

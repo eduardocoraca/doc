@@ -37,7 +37,7 @@ class Sistema_mck():
         return A,B,wn
 
     def __u(self, n,k):
-        return np.random.uniform(low=-1, high=1, size=2*self.__dof)*self.p[k]+self.p[k]
+        return np.random.uniform(low=-1, high=1, size=2*self.__dof)
 
     def simular(self):
         for k in tqdm(range(0, len(self.p))):
